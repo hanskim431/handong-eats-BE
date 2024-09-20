@@ -1,10 +1,17 @@
 import { Module } from '@nestjs/common';
-import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
-import { Users } from './users';
+import { UsersService } from './users.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import { UsersSchema } from './schema/user.schema';
 
 @Module({
+  imports: [
+    MongooseModule.forFeature([{ name: 'User', schema: UsersSchema }]), // User 모델 등록
+  ],
   controllers: [UsersController],
-  providers: [UsersService, Users],
+  providers: [
+    UsersService,
+    // ...usersProviders
+  ],
 })
 export class UsersModule {}
