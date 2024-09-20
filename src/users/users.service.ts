@@ -24,10 +24,15 @@ export class UsersService {
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
+    console.log(updateUserDto);
     return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(userID: string) {
+    return `This action removes a #${userID} user`;
+  }
+
+  async findOne(userID: string): Promise<User | null> {
+    return await this.userModel.where({ userID: userID }).findOne();
   }
 }
