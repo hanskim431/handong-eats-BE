@@ -2,14 +2,14 @@ import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Model } from 'mongoose';
-import { User } from 'src/users/interface/user.interface';
+import { User } from 'src/users/interface/users.interface';
 import 'dotenv/config';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userService: UsersService,
+    private readonly userService: UsersService,
 
     @Inject('USER_MODEL')
     private userModel: Model<User>,
