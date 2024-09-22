@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -28,7 +28,23 @@ export class UsersService {
     return `This action removes a #${userID} user`;
   }
 
-  async findOne(userID: string): Promise<User | null> {
-    return await this.userModel.where({ userID: userID }).findOne();
+  async findOne(userID: string): Promise<User> {
+    try {
+      const user = await this.userModel
+        .where({ userID: userID })
+        .findOne()
+        .exec();
+
+      if (!user) {
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      }
+
+      return user;
+    } catch (error) {
+      throw new HttpException(
+        'Internal Server Error :: user.findOne',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

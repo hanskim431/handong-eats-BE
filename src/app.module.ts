@@ -33,7 +33,8 @@ if (!mongodb_collection || typeof mongodb_collection != 'string') {
 @Module({
   imports: [
     MongooseModule.forRoot(
-      `mongodb+srv://${mongodb_id}:${mongodb_pw}@handong-eats.tkatv.mongodb.net/${mongodb_collection}?retryWrites=true&w=majority&appName=handong-eats-eats`,
+      `mongodb+srv://${mongodb_id}:${mongodb_pw}@handong-eats.tkatv.mongodb.net/
+      ${mongodb_collection}?retryWrites=true&w=majority&appName=handong-eats-eats`,
     ), // MongoDB 연결 설정
     UsersModule,
   ],
