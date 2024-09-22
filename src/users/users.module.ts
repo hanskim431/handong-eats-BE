@@ -9,6 +9,9 @@ import { UsersSchema } from './schema/user.schema';
     MongooseModule.forFeature([{ name: 'User', schema: UsersSchema }]), // User 모델 등록
   ],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [
+    UsersService,
+    // ...usersProviders
+  ],
 })
 export class UsersModule {}
