@@ -26,16 +26,12 @@ export class UsersService {
   }
 
   async register(createUserDto: CreateUserDto) {
-    const user = await this.findOneByUserID(createUserDto.userID).catch(
-      (error) => {
-        console.error(error);
-
-        throw new HttpException(
-          'INTERNAL_SERVER_ERROR :: register user',
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      },
-    );
+    const user = await this.findOneByUserID(createUserDto.userID).catch(() => {
+      throw new HttpException(
+        'INTERNAL_SERVER_ERROR :: user.register',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    });
 
     if (user) {
       throw new HttpException('User already exists', HttpStatus.CONFLICT);
