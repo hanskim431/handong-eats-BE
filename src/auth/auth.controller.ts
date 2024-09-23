@@ -6,7 +6,6 @@ import { LoginAuthDto } from './dto/login-auth.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  // TODO: 로그인 구현
   @Post('login')
   login(@Body() loginAuthDto: LoginAuthDto) {
     return this.authService.login(loginAuthDto.userID, loginAuthDto.password);

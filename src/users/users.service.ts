@@ -41,8 +41,6 @@ export class UsersService {
 
     const salt = await bcrypt.genSalt(10);
 
-    //TODO: 비밀번호 유효성 검사
-
     const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
 
     createUserDto.password = hashedPassword;
