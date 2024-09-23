@@ -1,30 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CartService } from './cart.service';
-import { CreateCartDto } from './dto/create-cart.dto';
-import { UpdateCartDto } from './dto/update-cart.dto';
+import { UpsertCartDto } from './dto/upsert-cart.dto';
 
 @Controller('cart')
 export class CartController {
+  // eslint-disable-next-line no-unused-vars
   constructor(private readonly cartService: CartService) {}
 
-  @Post()
-  create(@Body() createCartDto: CreateCartDto) {
-    return this.cartService.create(createCartDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.cartService.findAll();
+  @Post(':id')
+  upsert(@Param('id') userId: string, @Body() upsertCartDto: UpsertCartDto) {
+    return this.cartService.upsert(userId, upsertCartDto);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.cartService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCartDto: UpdateCartDto) {
-    return this.cartService.update(+id, updateCartDto);
+    return this.cartService.findOneByUserID(id);
   }
 
   @Delete(':id')
