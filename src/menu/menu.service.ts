@@ -1,26 +1,36 @@
-import { Injectable } from '@nestjs/common';
-import { CreateMenuDto } from './dto/create-menu.dto';
-import { UpdateMenuDto } from './dto/update-menu.dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Menu } from './model/menu.interface';
 
 @Injectable()
 export class MenuService {
-  create(createMenuDto: CreateMenuDto) {
-    return 'This action adds a new menu';
+  // eslint-disable-next-line no-unused-vars
+  constructor(@InjectModel('Menu') private readonly menuModel: Model<Menu>) {}
+
+  async findAll(): Promise<Menu[] | null> {
+    return await this.menuModel
+      .find()
+      .exec()
+      .catch((error) => {
+        throw new HttpException(
+          `INTERNAL_SERVER_ERROR::menu.findOneByMenuID-${error.message}`,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      });
   }
 
-  findAll() {
-    return `This action returns all menu`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} menu`;
-  }
-
-  update(id: number, updateMenuDto: UpdateMenuDto) {
-    return `This action updates a #${id} menu`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} menu`;
+  async findOneByMenuID(menuID: string): Promise<Menu | null> {
+    const menu = await this.menuModel
+      .where({ menuID: menuID })
+      .findOne()
+      .exec()
+      .catch((error) => {
+        throw new HttpException(
+          `INTERNAL_SERVER_ERROR::menu.findOneByMenuID-${error.message}`,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      });
+    return menu;
   }
 }
