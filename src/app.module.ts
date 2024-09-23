@@ -32,11 +32,11 @@ if (
   );
 }
 
+const mongoDBUrl = `mongodb+srv://${process.env.MONGODB_ID}:${process.env.MONGODB_PW}@handong-eats.tkatv.mongodb.net/${process.env.MONGODB_COLLECTION}?retryWrites=true&w=majority&appName=handong-eats-eats`;
+
 @Module({
   imports: [
-    MongooseModule.forRoot(
-      `mongodb+srv://${process.env.MONGODB_ID}:${process.env.MONGODB_PW}@handong-eats.tkatv.mongodb.net/${process.env.MONGODB_COLLECTION}?retryWrites=true&w=majority&appName=handong-eats-eats`,
-    ), // MongoDB 연결 설정
+    MongooseModule.forRoot(mongoDBUrl), // MongoDB 연결 설정
     UsersModule,
     AuthModule,
     MenuModule,
