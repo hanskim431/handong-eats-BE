@@ -4,6 +4,8 @@ import { Model } from 'mongoose';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './interface/users.interface';
 import { CreateUserDto } from './dto/create-user.dto';
+import * as bcrypt from 'bcrypt';
+import 'dotenv/config';
 
 @Injectable()
 export class UsersService {
@@ -36,6 +38,14 @@ export class UsersService {
     if (user) {
       throw new HttpException('User already exists', HttpStatus.CONFLICT);
     }
+
+    const salt = await bcrypt.genSalt(10);
+
+    //TODO: 비밀번호 유효성 검사
+
+    const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
+
+    createUserDto.password = hashedPassword;
 
     const createdUser = new this.userModel(createUserDto);
     return createdUser.save();
