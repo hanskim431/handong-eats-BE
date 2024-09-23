@@ -8,4 +8,5 @@ export interface User extends Document {
   role: string;
   age: number;
   phone: string;
+  refreshToken?: string;
 }

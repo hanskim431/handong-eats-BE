@@ -8,4 +8,5 @@ export const UsersSchema = new mongoose.Schema({
   role: { type: String, required: true },
   age: { type: Number, required: true },
   phone: { type: String, required: true },
+  refreshToken: { type: String, required: false },
 });

@@ -19,7 +19,7 @@ export class AuthController {
 
   // TODO: 리프래시 구현
   @Post('refresh')
-  refresh(@Body() body: any) {
-    return this.authService.refresh(body);
+  refresh(@Body() refreshToken: string) {
+    return this.authService.refresh(refreshToken);
   }
 }
