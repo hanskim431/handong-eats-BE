@@ -5,6 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { MenuModule } from './menu/menu.module';
+import { CartModule } from './cart/cart.module';
 
 if (!process.env.MONGODB_ID || typeof process.env.MONGODB_ID != 'string') {
   throw new HttpException(
@@ -37,6 +39,8 @@ if (
     ), // MongoDB 연결 설정
     UsersModule,
     AuthModule,
+    MenuModule,
+    CartModule,
   ],
   controllers: [AppController],
   providers: [AppService],
