@@ -1,13 +1,19 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { UsersService } from 'src/users/users.service';
-import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { InjectModel } from '@nestjs/mongoose';
+import * as bcrypt from 'bcrypt';
+import { Model } from 'mongoose';
 import { User } from 'src/users/model/users.interface';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class AuthService {
   constructor(
+    // eslint-disable-next-line no-unused-vars
+    @InjectModel('User') private readonly userModel: Model<User>,
+    // eslint-disable-next-line no-unused-vars
     private readonly usersService: UsersService,
+    // eslint-disable-next-line no-unused-vars
     private readonly jwtService: JwtService,
   ) {}
 
@@ -18,7 +24,6 @@ export class AuthService {
     if (!user) {
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
     }
-
     return this.generateTokensAndUpdateUser(user);
   }
 
@@ -28,7 +33,8 @@ export class AuthService {
 
   async refresh(token: string) {
     // 1. 리프레시 토큰 검증
-    const user = await this.usersService.findUserByRefreshToken(token);
+    const user: Omit<User, 'password'> | null =
+      await this.usersService.findUserByRefreshToken(token);
 
     if (!user) {
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
@@ -37,30 +43,33 @@ export class AuthService {
     return this.generateTokensAndUpdateUser(user);
   }
 
-  async validateUser(userID: string, pass: string): Promise<any> {
-    const user = await this.usersService
-      .findOneByUserID(userID)
-      .catch((error) => {
-        throw new HttpException(
-          `INTERNAL_SERVER_ERROR::user.validate-${error.message}`,
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
+  async validateUser(
+    userID: string,
+    pass: string,
+  ): Promise<Omit<User, 'password'> | null> {
+    const user: User | null = await this.userModel
+      .where({ userID: userID })
+      .findOne()
+      .exec()
+      .catch(() => {
+        throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
       });
 
+    if (!user) return null;
+    const userObj = user.toObject();
     if (user && (await bcrypt.compare(pass, user.password))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-      const { password, ...result } = user;
+      const { password, ...result } = userObj;
       return result;
     }
 
     return null;
   }
 
-  private async generateTokensAndUpdateUser(user: User) {
+  private async generateTokensAndUpdateUser(user: Omit<User, 'password'>) {
     const payload = { username: user.name, sub: user.userID };
     const accessToken = this.jwtService.sign(payload, { expiresIn: '1h' });
     const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
-
     await this.usersService.update(user.userID, { refreshToken });
 
     return {

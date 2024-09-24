@@ -49,7 +49,6 @@ export class UsersService {
           HttpStatus.INTERNAL_SERVER_ERROR,
         );
       });
-
     if (!updatedUser) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
@@ -61,8 +60,10 @@ export class UsersService {
     return `This action removes a #${userID} user`;
   }
 
-  async findOneByUserID(userID: string): Promise<User | null> {
-    const user = await this.userModel
+  async findOneByUserID(
+    userID: string,
+  ): Promise<Omit<User, 'password'> | null> {
+    const user: User | null = await this.userModel
       .where({ userID: userID })
       .findOne()
       .exec()
@@ -73,12 +74,17 @@ export class UsersService {
         );
       });
 
-    return user;
+    if (!user) return null;
+    const userObj = user.toObject();
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+    const { password, ...result } = userObj;
+    return result;
   }
 
-  async findUserByRefreshToken(refreshToken: string): Promise<User | null> {
-    // 여기서는 리프레시 토큰을 포함하는 사용자 찾기
-    const user = await this.userModel
+  async findUserByRefreshToken(
+    refreshToken: string,
+  ): Promise<Omit<User, 'password'> | null> {
+    const user: User | null = await this.userModel
       .findOne({ refreshToken })
       .catch((error) => {
         throw new HttpException(
@@ -87,6 +93,10 @@ export class UsersService {
         );
       });
 
-    return user;
+    if (!user) return null;
+    const userObj = user.toObject();
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+    const { password, ...result } = userObj;
+    return result;
   }
 }

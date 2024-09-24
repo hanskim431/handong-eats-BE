@@ -5,9 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UsersSchema } from './model/users.schema';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: 'User', schema: UsersSchema }]), // User 모델 등록
-  ],
+  imports: [MongooseModule.forFeature([{ name: 'User', schema: UsersSchema }])],
   controllers: [UsersController],
   providers: [UsersService],
   exports: [UsersService],
