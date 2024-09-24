@@ -16,8 +16,9 @@ export class AuthController {
     return this.authService.logout(body);
   }
 
+  // TODO: get the refresh token in header
   @Post('refresh')
-  refresh(@Body() refreshToken: string) {
-    return this.authService.refresh(refreshToken);
+  refresh(@Body() body: any) {
+    return this.authService.refresh(body.refreshToken);
   }
 }
