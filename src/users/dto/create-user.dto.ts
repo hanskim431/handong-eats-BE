@@ -9,7 +9,7 @@ import {
 export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
-  userID: string;
+  userId: string;
 
   @IsString()
   @IsNotEmpty()

@@ -43,11 +43,11 @@ export class AuthService {
   }
 
   async validateUser(
-    userID: string,
+    userId: string,
     pass: string,
   ): Promise<Omit<User, 'password'> | null> {
     const user: User | null = await this.userModel
-      .where({ userID: userID })
+      .where({ userId: userId })
       .findOne()
       .exec()
       .catch(() => {
@@ -66,10 +66,10 @@ export class AuthService {
   }
 
   private async generateTokensAndUpdateUser(user: Omit<User, 'password'>) {
-    const payload = { username: user.name, sub: user.userID };
+    const payload = { username: user.name, sub: user.userId };
     const accessToken = this.jwtService.sign(payload, { expiresIn: '1h' });
     const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
-    await this.usersService.update(user.userID, { refreshToken });
+    await this.usersService.update(user.userId, { refreshToken });
 
     return {
       accessToken,

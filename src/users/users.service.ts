@@ -12,7 +12,7 @@ export class UsersService {
   constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
   async register(createUserDto: CreateUserDto) {
-    const user = await this.findOneByUserID(createUserDto.userID).catch(() => {
+    const user = await this.findOneByUserID(createUserDto.userId).catch(() => {
       throw new HttpException(
         'INTERNAL_SERVER_ERROR :: user.register',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -33,10 +33,10 @@ export class UsersService {
     return createdUser.save();
   }
 
-  async update(userID: string, updateUserDto: UpdateUserDto) {
+  async update(userId: string, updateUserDto: UpdateUserDto) {
     const updatedUser = await this.userModel
       .findOneAndUpdate(
-        { userID: userID }, // 조건: userID 기준
+        { userId: userId }, // 조건: userId 기준
         updateUserDto,
         {
           new: true, // 업데이트된 문서를 반환
@@ -56,15 +56,15 @@ export class UsersService {
     return updatedUser;
   }
 
-  remove(userID: string) {
-    return `This action removes a #${userID} user`;
+  remove(userId: string) {
+    return `This action removes a #${userId} user`;
   }
 
   async findOneByUserID(
-    userID: string,
+    userId: string,
   ): Promise<Omit<User, 'password'> | null> {
     const user: User | null = await this.userModel
-      .where({ userID: userID })
+      .where({ userId: userId })
       .findOne()
       .exec()
       .catch((error) => {
