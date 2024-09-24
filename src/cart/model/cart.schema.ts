@@ -1,22 +1,19 @@
 import * as mongoose from 'mongoose';
 
-export const CartSchema = new mongoose.Schema(
-  {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    cartItems: [
-      {
-        menuId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Menu',
-          required: true,
-        },
-        quantity: { type: Number, required: true, default: 1 },
+export const CartSchema = new mongoose.Schema({
+  userId: { type: String, required: true },
+  cartItems: [
+    {
+      menuId: {
+        type: String,
+        ref: 'User',
+        required: true,
       },
-    ],
-  },
-  { timestamps: true },
-);
+      quantity: {
+        type: Number,
+        ref: 'Menu',
+        required: true,
+      },
+    },
+  ],
+});
