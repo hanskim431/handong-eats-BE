@@ -11,13 +11,11 @@ export class AuthController {
     return this.authService.login(loginAuthDto.userID, loginAuthDto.password);
   }
 
-  // TODO: 로그아웃 구현
   @Post('logout')
   logout(@Body() body: any) {
     return this.authService.logout(body);
   }
 
-  // TODO: 리프래시 구현
   @Post('refresh')
   refresh(@Body() refreshToken: string) {
     return this.authService.refresh(refreshToken);

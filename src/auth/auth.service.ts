@@ -32,7 +32,6 @@ export class AuthService {
   }
 
   async refresh(token: string) {
-    // 1. 리프레시 토큰 검증
     const user: Omit<User, 'password'> | null =
       await this.usersService.findUserByRefreshToken(token);
 
