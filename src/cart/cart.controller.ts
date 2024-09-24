@@ -7,14 +7,14 @@ export class CartController {
   // eslint-disable-next-line no-unused-vars
   constructor(private readonly cartService: CartService) {}
 
-  @Post(':id')
-  upsert(@Param('id') userId: string, @Body() upsertCartDto: UpsertCartDto) {
-    return this.cartService.upsert(userId, upsertCartDto);
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.cartService.findOneByUserID(id);
+  }
+
+  @Post(':id')
+  upsert(@Param('id') userId: string, @Body() upsertCartDto: UpsertCartDto) {
+    return this.cartService.upsert(userId, upsertCartDto);
   }
 
   @Delete(':id')
