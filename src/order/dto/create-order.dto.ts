@@ -13,21 +13,16 @@ class CartItem {
 
   @IsNumber()
   @IsNotEmpty()
-  quantity: number;
+  amount: number;
+
+  price?: number;
+
+  sumPrice?: number;
 }
 
-class OrderList {
-  @IsNotEmpty()
-  @ValidateNested({ each: true })
-  @Type(() => CartItem)
-  cartItems: CartItem[];
-}
-
-export class UpsertOrderDto {
+export class CreateOrderDto {
   // TODO: random orderId
-  @IsString()
-  @IsNotEmpty()
-  orderId: string;
+  orderId?: string;
 
   @IsString()
   @IsNotEmpty()
@@ -46,7 +41,9 @@ export class UpsertOrderDto {
   deliveryAddress: string;
 
   @IsNotEmpty()
-  @ValidateNested()
-  @Type(() => OrderList)
-  orderList: OrderList;
+  @ValidateNested({ each: true })
+  @Type(() => CartItem)
+  cartItems: CartItem[];
+
+  totalPrice: number;
 }

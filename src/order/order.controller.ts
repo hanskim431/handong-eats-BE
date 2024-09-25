@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { UpsertOrderDto } from './dto/upsert-order.dto';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { CreateOrderDto } from './dto/create-order.dto';
 import { OrderService } from './order.service';
+import { UpdateOrderDto } from './dto/update-order.dto';
 
 @Controller('order')
 export class OrderController {
@@ -8,8 +9,19 @@ export class OrderController {
 
   // TODO: Auth Guard
   @Post()
-  upsert(@Body() upsertOrderDto: UpsertOrderDto) {
-    return this.orderService.upsert(upsertOrderDto);
+  create(@Body() createOrderDto: CreateOrderDto) {
+    const orderData = {
+      ...createOrderDto,
+      cartItems: [...createOrderDto.cartItems],
+    };
+
+    return this.orderService.create(orderData);
+  }
+
+  @Patch()
+  updateOrderStatus(@Body() updateOrderDto: UpdateOrderDto) {
+    const { orderId, orderStatus } = updateOrderDto;
+    return this.orderService.updateOrderStatus(orderId, orderStatus);
   }
 
   // TODO: Auth Guard

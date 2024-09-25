@@ -1,4 +1,11 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreatePaymentDto } from './create-payment.dto';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class UpdatePaymentDto extends PartialType(CreatePaymentDto) {}
+export class PayPriceDto {
+  @IsString()
+  @IsNotEmpty()
+  userId: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  price: number;
+}

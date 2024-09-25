@@ -1,26 +1,39 @@
-import { Injectable } from '@nestjs/common';
-import { CreatePaymentDto } from './dto/create-payment.dto';
-import { UpdatePaymentDto } from './dto/update-payment.dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class PaymentService {
-  create(createPaymentDto: CreatePaymentDto) {
-    return 'This action adds a new payment';
-  }
+  constructor(
+    // eslint-disable-next-line no-unused-vars
+    private readonly userService: UsersService,
+  ) {}
 
-  findAll() {
-    return `This action returns all payment`;
-  }
+  async payPrice(userId: string, price: number) {
+    const user = await this.userService
+      .findOneByUserID(userId)
+      .catch((error) => {
+        throw new HttpException(
+          `INTERNAL_SERVER_ERROR::payment.payPrice-${error}`,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      });
 
-  findOne(id: number) {
-    return `This action returns a #${id} payment`;
-  }
+    if (!user) {
+      throw new HttpException(
+        `NOT_FOUND::payment.payPrice-invalied user`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
 
-  update(id: number, updatePaymentDto: UpdatePaymentDto) {
-    return `This action updates a #${id} payment`;
-  }
+    if (user.point >= price) {
+      throw new HttpException(
+        'BAD_REQUEST::payment.payPrice-leak of points',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} payment`;
+    await this.userService.update(userId, { point: user.point - price });
+
+    return true;
   }
 }

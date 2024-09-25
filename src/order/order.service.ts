@@ -1,47 +1,64 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { UpsertOrderDto } from './dto/upsert-order.dto';
+import { MenuService } from 'src/menu/menu.service';
+import { PaymentService } from 'src/payment/payment.service';
+import { CreateOrderDto } from './dto/create-order.dto';
 import { Order } from './model/order.interface';
 
 @Injectable()
 export class OrderService {
   constructor(
-    @InjectModel('Order')
+    @InjectModel('Order') // eslint-disable-next-line no-unused-vars
     private readonly orderModel: Model<Order>,
+    // eslint-disable-next-line no-unused-vars
+    private readonly menuService: MenuService,
+    // eslint-disable-next-line no-unused-vars
+    private readonly paymentService: PaymentService,
   ) {}
 
-  async upsert(upsertOrderDto: UpsertOrderDto) {
-    const existingOrder: Order | null = await this.orderModel
-      .findOne({
-        userId: upsertOrderDto.userId,
-      })
+  async create(orderData: CreateOrderDto): Promise<Order> {
+    let totalPrice: number = 0;
+
+    for (const [index, element] of orderData.cartItems.entries()) {
+      const menu = await this.menuService.findOneByMenuID(element.menuId);
+      if (!menu)
+        throw new HttpException(
+          'NOT_FOUND:::order.create.findOneByMenuID',
+          HttpStatus.NOT_FOUND,
+        );
+
+      orderData.cartItems[index].price = menu.price;
+      orderData.cartItems[index].sumPrice = menu.price * element.amount;
+      totalPrice += orderData.cartItems[index].sumPrice;
+    }
+
+    orderData.totalPrice = totalPrice;
+
+    await this.paymentService.payPrice(orderData.userId, totalPrice);
+
+    const newOrder = new this.orderModel({
+      ...orderData,
+    });
+
+    return await newOrder.save().catch((error) => {
+      throw new HttpException(
+        `INTERNAL_SERVER_ERROR::order.upsert-${error}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    });
+  }
+
+  async updateOrderStatus(orderId: string, orderStatus: string) {
+    const result = await this.orderModel
+      .findByIdAndUpdate(orderId, { orderStatus: orderStatus }, { new: true })
       .catch((error) => {
         throw new HttpException(
           `INTERNAL_SERVER_ERROR::cart.upsert-${error.message}`,
           HttpStatus.INTERNAL_SERVER_ERROR,
         );
       });
-
-    if (existingOrder) {
-      existingOrder.orderStatus = upsertOrderDto.orderStatus;
-      return await existingOrder.save().catch((error) => {
-        throw new HttpException(
-          `INTERNAL_SERVER_ERROR::order.upsert-${error}`,
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      });
-    } else {
-      const newOrder = new this.orderModel({
-        ...upsertOrderDto,
-      });
-      return await newOrder.save().catch((error) => {
-        throw new HttpException(
-          `INTERNAL_SERVER_ERROR::order.upsert-${error}`,
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      });
-    }
+    return result;
   }
 
   async findAllByUserId(userId: string) {

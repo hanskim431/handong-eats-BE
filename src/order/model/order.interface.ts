@@ -2,21 +2,19 @@ import { Document } from 'mongoose';
 
 export interface CartItem {
   menuId: string;
-  quantity: number;
-}
-
-export interface OrderList {
-  cartItems: CartItem[];
+  amount: number;
+  price: number;
+  sumPrice: number;
 }
 
 export interface Order extends Document {
-  orderId: string;
+  orderId?: string;
   orderStatus: string;
-  paymentStatus: string;
   userId: string;
-  storeName: string;
   deliveryAddress: string;
-  orderList: OrderList;
+  storeName: string;
+  cartItems: CartItem[];
+  totalPrice: number;
   createdAt: Date;
   updatedAt: Date;
 }
