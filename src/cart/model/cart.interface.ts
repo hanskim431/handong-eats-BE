@@ -8,4 +8,6 @@ export interface CartItem {
 export interface Cart extends Document {
   userId: string;
   cartItems: CartItem[];
+  createdAt: Date;
+  updatedAt: Date;
 }
