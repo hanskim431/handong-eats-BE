@@ -1,17 +1,21 @@
 import * as mongoose from 'mongoose';
-import { timestamp } from 'rxjs';
 
-export const UsersSchema = new mongoose.Schema(
+export const OrderSchema = new mongoose.Schema(
   {
-    orderID: { type: String, required: true },
+    orderId: { type: String, required: true },
+    orderStatus: { type: String, required: true },
+    paymentStatus: { type: String, required: true, default: 'PENDING' },
     userId: { type: String, required: true },
-    email: { type: String, required: true },
-    password: { type: String, required: true },
-    role: { type: String, required: true, default: 'consumer' },
-    age: { type: Number, required: true },
-    phone: { type: String, required: true },
-    point: { type: Number, required: true, default: 0 },
-    refreshToken: { type: String, required: false },
+    storeName: { type: String, required: true },
+    deliveryAddress: { type: String, required: true },
+    orderList: {
+      cartItems: [
+        {
+          menuId: { type: String, required: true },
+          quantity: { type: Number, required: true },
+        },
+      ],
+    },
   },
   { timestamps: true },
 );

@@ -1,13 +1,22 @@
 import { Document } from 'mongoose';
 
-export interface User extends Document {
+export interface CartItem {
+  menuId: string;
+  quantity: number;
+}
+
+export interface OrderList {
+  cartItems: CartItem[];
+}
+
+export interface Order extends Document {
+  orderId: string;
+  orderStatus: string;
+  paymentStatus: string;
   userId: string;
-  name: string;
-  email: string;
-  password: string;
-  role: string;
-  age: number;
-  phone: string;
-  point: number;
-  refreshToken?: string;
+  storeName: string;
+  deliveryAddress: string;
+  orderList: OrderList;
+  createdAt: Date;
+  updatedAt: Date;
 }

@@ -1,32 +1,26 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { UpsertOrderDto } from './dto/upsert-order.dto';
 import { OrderService } from './order.service';
-import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
 
 @Controller('order')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
+  // TODO: Auth Guard
   @Post()
-  create(@Body() createOrderDto: CreateOrderDto) {
-    return this.orderService.create(createOrderDto);
+  upsert(@Body() upsertOrderDto: UpsertOrderDto) {
+    return this.orderService.upsert(upsertOrderDto);
   }
 
+  // TODO: Auth Guard
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.orderService.findOne(+id);
+  findAllByUserId(@Param('id') id: string) {
+    return this.orderService.findAllByUserId(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
-    return this.orderService.update(+id, updateOrderDto);
+  // TODO: Auth Guard
+  @Get(':id/recent')
+  findOneByUserId(@Param('id') id: string) {
+    return this.orderService.findOneByUserId(id);
   }
 }
