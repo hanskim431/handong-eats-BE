@@ -6,7 +6,6 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { MenuModule } from './menu/menu.module';
-import { CartModule } from './cart/cart.module';
 import { OrderModule } from './order/order.module';
 import { PaymentModule } from './payment/payment.module';
 
@@ -42,7 +41,6 @@ const mongoDBUrl = `mongodb+srv://${process.env.MONGODB_ID}:${process.env.MONGOD
     UsersModule,
     AuthModule,
     MenuModule,
-    CartModule,
     OrderModule,
     PaymentModule,
   ],
