@@ -14,12 +14,14 @@ export class CartController {
   }
 
   // TODO: Auth Guard
+  // TODO: Using userId inside body
   @Post(':id')
   upsert(@Param('id') userId: string, @Body() upsertCartDto: UpsertCartDto) {
     return this.cartService.upsert(userId, upsertCartDto);
   }
 
   // TODO: Auth Guard
+  // TODO: Using userId inside body
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.cartService.remove(id);
