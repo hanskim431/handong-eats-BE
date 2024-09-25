@@ -1,3 +1,19 @@
-import { CartDto } from './cart.dto';
+import { Type } from 'class-transformer';
+import { IsArray, IsNumber, IsString, ValidateNested } from 'class-validator';
+export class CartItem {
+  @IsString()
+  menuId: string;
 
-export class UpsertCartDto extends CartDto {}
+  @IsNumber()
+  quantity: number;
+}
+
+export class UpsertCartDto {
+  @IsString()
+  userId: string;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => CartItem)
+  cartItems: CartItem[];
+}
