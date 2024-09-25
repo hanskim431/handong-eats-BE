@@ -85,7 +85,7 @@ export class UsersService {
     refreshToken: string,
   ): Promise<Omit<User, 'password'> | null> {
     const user: User | null = await this.userModel
-      .findOne({ refreshToken })
+      .findOne({ refreshToken: refreshToken })
       .catch((error) => {
         throw new HttpException(
           `INTERNAL_SERVER_ERROR::user.findUserByRefreshToken-${error.message}`,
