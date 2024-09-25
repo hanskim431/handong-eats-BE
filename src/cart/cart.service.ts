@@ -1,10 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { DeleteResult } from 'mongodb';
 import { Model } from 'mongoose';
 import { UpsertCartDto } from './dto/upsert-cart.dto';
 import { Cart } from './model/cart.interface';
-import { error } from 'console';
-import { DeleteResult } from 'mongodb';
 
 @Injectable()
 export class CartService {
