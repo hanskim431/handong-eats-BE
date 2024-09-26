@@ -18,7 +18,7 @@ export class OrderController {
     return this.orderService.create(orderData);
   }
 
-  @Patch()
+  @Patch('status')
   updateOrderStatus(@Body() updateOrderDto: UpdateOrderDto) {
     const { orderId, orderStatus } = updateOrderDto;
     return this.orderService.updateOrderStatus(orderId, orderStatus);
