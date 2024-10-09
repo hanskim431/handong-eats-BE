@@ -3,8 +3,8 @@ import { Document } from 'mongoose';
 export interface CartItem {
   menuId: string;
   amount: number;
-  price: number;
-  sumPrice: number;
+  cost: number;
+  sumCost: number;
 }
 
 export interface Order extends Document {
@@ -14,7 +14,7 @@ export interface Order extends Document {
   deliveryAddress: string;
   storeName: string;
   cartItems: CartItem[];
-  totalPrice: number;
+  totalCost: number;
   createdAt: Date;
   updatedAt: Date;
 }

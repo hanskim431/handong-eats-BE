@@ -8,31 +8,31 @@ export class PaymentService {
     private readonly userService: UsersService,
   ) {}
 
-  async payPrice(userId: string, price: number) {
+  async payCost(userId: string, cost: number) {
     const user = await this.userService
       .findOneByUserID(userId)
       .catch((error) => {
         throw new HttpException(
-          `INTERNAL_SERVER_ERROR::payment.payPrice-${error}`,
+          `INTERNAL_SERVER_ERROR::payment.payCost-${error}`,
           HttpStatus.INTERNAL_SERVER_ERROR,
         );
       });
 
     if (!user) {
       throw new HttpException(
-        `NOT_FOUND::payment.payPrice-invalied user`,
+        `NOT_FOUND::payment.payCost-invalied user`,
         HttpStatus.NOT_FOUND,
       );
     }
 
-    if (user.point >= price) {
+    if (user.point >= cost) {
       throw new HttpException(
-        'BAD_REQUEST::payment.payPrice-leak of points',
+        'BAD_REQUEST::payment.payCost-leak of points',
         HttpStatus.BAD_REQUEST,
       );
     }
 
-    await this.userService.update(userId, { point: user.point - price });
+    await this.userService.update(userId, { point: user.point - cost });
 
     return true;
   }

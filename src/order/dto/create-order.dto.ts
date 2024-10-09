@@ -15,9 +15,9 @@ class CartItem {
   @IsNotEmpty()
   amount: number;
 
-  price?: number;
+  cost?: number;
 
-  sumPrice?: number;
+  sumCost?: number;
 }
 
 export class CreateOrderDto {
@@ -45,5 +45,5 @@ export class CreateOrderDto {
   @Type(() => CartItem)
   cartItems: CartItem[];
 
-  totalPrice: number;
+  totalCost: number;
 }

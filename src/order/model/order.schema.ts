@@ -12,11 +12,11 @@ export const OrderSchema = new mongoose.Schema(
       {
         menuId: { type: String, required: true },
         amount: { type: Number, required: true },
-        price: { type: Number, required: true },
-        sumPrice: { type: Number, required: true },
+        cost: { type: Number, required: true },
+        sumCost: { type: Number, required: true },
       },
     ],
-    totalPrice: { type: Number, required: true },
+    totalCost: { type: Number, required: true },
   },
   { timestamps: true },
 );

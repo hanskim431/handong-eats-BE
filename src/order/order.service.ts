@@ -18,7 +18,7 @@ export class OrderService {
   ) {}
 
   async create(orderData: CreateOrderDto): Promise<Order> {
-    let totalPrice: number = 0;
+    let totalCost: number = 0;
 
     for (const [index, element] of orderData.cartItems.entries()) {
       const menu = await this.menuService.findOneByMenuID(element.menuId);
@@ -28,14 +28,14 @@ export class OrderService {
           HttpStatus.NOT_FOUND,
         );
 
-      orderData.cartItems[index].price = menu.price;
-      orderData.cartItems[index].sumPrice = menu.price * element.amount;
-      totalPrice += orderData.cartItems[index].sumPrice;
+      orderData.cartItems[index].cost = menu.cost;
+      orderData.cartItems[index].sumCost = menu.cost * element.amount;
+      totalCost += orderData.cartItems[index].sumCost;
     }
 
-    orderData.totalPrice = totalPrice;
+    orderData.totalCost = totalCost;
 
-    await this.paymentService.payPrice(orderData.userId, totalPrice);
+    await this.paymentService.payCost(orderData.userId, totalCost);
 
     const newOrder = new this.orderModel({
       ...orderData,
