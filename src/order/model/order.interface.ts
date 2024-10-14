@@ -12,7 +12,7 @@ export interface Order extends Document {
   orderStatus: string;
   userId: string;
   deliveryAddress: string;
-  storeName: string;
+  storeId: string;
   cartItems: CartItem[];
   totalCost: number;
   createdAt: Date;

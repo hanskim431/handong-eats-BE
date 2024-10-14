@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsNotEmpty,
   IsNumber,
   IsString,
@@ -6,35 +7,42 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
+class Option {
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  cost: number;
+
+  @IsString()
+  @IsNotEmpty()
+  description: string;
+}
+
 class CartItem {
   @IsString()
   @IsNotEmpty()
-  menuId: string;
+  menuName: string;
 
   @IsNumber()
   @IsNotEmpty()
   amount: number;
 
-  cost?: number;
+  @IsArray()
+  @IsNotEmpty()
+  options: Option[];
 
-  sumCost?: number;
+  @IsNumber()
+  @IsNotEmpty()
+  cost: number;
 }
 
 export class CreateOrderDto {
-  // TODO: random orderId
-  orderId?: string;
-
   @IsString()
   @IsNotEmpty()
-  orderStatus: string;
-
-  @IsString()
-  @IsNotEmpty()
-  userId: string;
-
-  @IsString()
-  @IsNotEmpty()
-  storeName: string;
+  storeId: string;
 
   @IsString()
   @IsNotEmpty()
@@ -45,5 +53,7 @@ export class CreateOrderDto {
   @Type(() => CartItem)
   cartItems: CartItem[];
 
+  @IsNumber()
+  @IsNotEmpty()
   totalCost: number;
 }

@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MenuService } from 'src/menu/menu.service';
 import { PaymentService } from 'src/payment/payment.service';
-import { CreateOrderDto } from './dto/create-order.dto';
 import { Order } from './model/order.interface';
 
 @Injectable()
@@ -17,30 +16,16 @@ export class OrderService {
     private readonly paymentService: PaymentService,
   ) {}
 
-  async create(orderData: CreateOrderDto): Promise<Order> {
-    let totalCost: number = 0;
+  async create(orderData: any): Promise<Order> {
+    const totalCost: number = orderData.totalCost;
 
-    for (const [index, element] of orderData.cartItems.entries()) {
-      const menu = await this.menuService.findOneByMenuID(element.menuId);
-      if (!menu)
-        throw new HttpException(
-          'NOT_FOUND:::order.create.findOneByMenuID',
-          HttpStatus.NOT_FOUND,
-        );
-
-      orderData.cartItems[index].cost = menu.cost;
-      orderData.cartItems[index].sumCost = menu.cost * element.amount;
-      totalCost += orderData.cartItems[index].sumCost;
-    }
-
-    orderData.totalCost = totalCost;
+    orderData.orderStatus = 'Pending';
 
     await this.paymentService.payCost(orderData.userId, totalCost);
 
     const newOrder = new this.orderModel({
       ...orderData,
     });
-
     return await newOrder.save().catch((error) => {
       throw new HttpException(
         `INTERNAL_SERVER_ERROR::order.upsert-${error}`,
@@ -90,6 +75,37 @@ export class OrderService {
         );
       });
 
+    return cart;
+  }
+
+  async findAllByStoreId(storeId: string) {
+    const cart: Order[] | null[] = await this.orderModel
+      .find({
+        storeId: storeId,
+      })
+      .exec()
+      .catch((error) => {
+        throw new HttpException(
+          `INTERNAL_SERVER_ERROR::order.findAllByUserId-${error.message}`,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      });
+
+    return cart;
+  }
+  async findPendingOneByStoreId(storeId: string) {
+    const cart: Order | null = await this.orderModel
+      .findOne({
+        storeId: storeId,
+        orderStatus: 'Pending',
+      })
+      .exec()
+      .catch((error) => {
+        throw new HttpException(
+          `INTERNAL_SERVER_ERROR::order.findOneByStoreId-${error.message}`,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      });
     return cart;
   }
 }
