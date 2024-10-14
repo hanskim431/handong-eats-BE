@@ -66,7 +66,11 @@ export class AuthService {
   }
 
   private async generateTokensAndUpdateUser(user: Omit<User, 'password'>) {
-    const payload = { username: user.name, sub: user.userId };
+    const payload = {
+      username: user.name,
+      userId: user.userId,
+      role: user.role,
+    };
     const accessToken = this.jwtService.sign(payload, { expiresIn: '1h' });
     const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
     await this.usersService.update(user.userId, { refreshToken });
