@@ -1,10 +1,5 @@
-import {
-  IsString,
-  IsEmail,
-  IsNumber,
-  IsNotEmpty,
-  Matches,
-} from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
@@ -33,6 +28,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   role: string;
 
+  @Type(() => Number) // 숫자로 변환
   @IsNumber()
   @IsNotEmpty()
   age: number;
