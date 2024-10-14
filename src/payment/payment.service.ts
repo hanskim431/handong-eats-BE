@@ -25,7 +25,7 @@ export class PaymentService {
       );
     }
 
-    if (user.point >= cost) {
+    if (user.point < cost) {
       throw new HttpException(
         'BAD_REQUEST::payment.payCost-leak of points',
         HttpStatus.BAD_REQUEST,
