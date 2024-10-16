@@ -63,10 +63,19 @@ export class OrderService {
   }
 
   async findOneByUserId(userId: string) {
+    const oneMinuteAgo = new Date(Date.now() - 1 * 60 * 1000); // 1분 전 시간 계산
+
     const cart: Order | null = await this.orderModel
       .findOne({
         userId: userId,
+        orderStatus: { $nin: ['Finished'] },
+        // 'Rejected' 상태인 경우, updatedAt이 1분 이내인 것만 조회
+        $or: [
+          { orderStatus: { $ne: 'Rejected' } }, // Rejected가 아닌 경우는 모두 허용
+          { orderStatus: 'Rejected', updatedAt: { $gte: oneMinuteAgo } }, // Rejected인데 1분 이내인 경우만 허용
+        ],
       })
+      .sort({ createdAt: -1 })
       .exec()
       .catch((error) => {
         throw new HttpException(
@@ -74,6 +83,10 @@ export class OrderService {
           HttpStatus.INTERNAL_SERVER_ERROR,
         );
       });
+
+    if (cart == null) {
+      throw new HttpException('No Order Here', HttpStatus.NOT_FOUND);
+    }
 
     return cart;
   }
@@ -83,6 +96,7 @@ export class OrderService {
       .find({
         storeId: storeId,
       })
+      .sort({ createdAt: -1 })
       .exec()
       .catch((error) => {
         throw new HttpException(
@@ -93,11 +107,12 @@ export class OrderService {
 
     return cart;
   }
-  async findPendingOneByStoreId(storeId: string) {
+
+  async findOneByStoreId(storeId: string) {
     const cart: Order | null = await this.orderModel
       .findOne({
         storeId: storeId,
-        orderStatus: 'Pending',
+        orderStatus: { $nin: ['Rejected', 'Finished'] },
       })
       .exec()
       .catch((error) => {

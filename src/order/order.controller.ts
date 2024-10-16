@@ -48,9 +48,9 @@ export class OrderController {
   }
 
   // TODO: Auth Guard
-  @Get('store/pending')
-  findPendingOneByStoreId(@GetUser() userToken: any) {
+  @Get('store/one')
+  findOneByStoreId(@GetUser() userToken: any) {
     const storeId = userToken.userId;
-    return this.orderService.findPendingOneByStoreId(storeId);
+    return this.orderService.findOneByStoreId(storeId);
   }
 }
