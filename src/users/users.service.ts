@@ -77,7 +77,7 @@ export class UsersService {
     if (!user) return null;
     const userObj = user.toObject();
     // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-    const { password, ...result } = userObj;
+    const { password, refreshToken, ...result } = userObj;
     return result;
   }
 

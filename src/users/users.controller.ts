@@ -10,9 +10,11 @@ import {
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { GetUser } from 'src/utils/get-user.decorator';
 
 @Controller('users')
 export class UsersController {
+  // eslint-disable-next-line no-unused-vars
   constructor(private readonly usersService: UsersService) {}
 
   @Post('register')
@@ -21,9 +23,10 @@ export class UsersController {
   }
 
   // TODO: Auth Guard
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOneByUserID(id);
+  @Get()
+  findOne(@GetUser() userToken: any) {
+    const userId = userToken.userId;
+    return this.usersService.findOneByUserID(userId);
   }
 
   // TODO: Auth Guard
