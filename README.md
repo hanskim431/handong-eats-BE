@@ -12,12 +12,7 @@ NestJS 기반의 한동대학교 학생 식사 주문 플랫폼 백엔드 프로
 
 ## 기술 스택
 
-- **Framework**: [NestJS](https://nestjs.com/)
-- **Language**: TypeScript
-- **Database**: MongoDB
-- **Authentication**: JWT
-- **Validation**: class-validator
-- **Test**: Jest
+<img src="https://skillicons.dev/icons?i=nestjs,ts,pnpm,mongodb,flutter,git,github,vscode,ubuntu,ros" />
 
 ## 폴더 구조
 
