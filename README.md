@@ -1,73 +1,73 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Handong Eats - Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+NestJS 기반의 한동대학교 학생 식사 주문 플랫폼 백엔드 프로젝트입니다.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 주요 기능
 
-## Description
+- 사용자 인증 및 JWT 기반 로그인
+- 메뉴 조회 및 등록
+- 주문 생성 및 상태 관리
+- 관리자와 사용자 역할 분리
+- MongoDB 연동을 통한 데이터 저장
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 기술 스택
 
-## Installation
+- **Framework**: [NestJS](https://nestjs.com/)
+- **Language**: TypeScript
+- **Database**: MongoDB
+- **Authentication**: JWT
+- **Validation**: class-validator
+- **Test**: Jest
 
-```bash
-$ npm install
+## 폴더 구조
+
+```
+handong-eats-BE
+├── src
+│   ├── auth          # 인증 모듈
+│   ├── menu          # 메뉴 모듈
+│   ├── order         # 주문 모듈
+│   ├── ...
+├── test              # 유닛 테스트
+├── package.json      # 프로젝트 설정
+├── tsconfig.json     # TypeScript 설정
 ```
 
-## Running the app
+## 실행 방법
 
 ```bash
-# development
-$ npm run start
+# 1. 패키지 설치
+npm install
 
-# watch mode
-$ npm run start:dev
+# 2. 환경 변수 설정 (.env 파일 작성)
+# 예시:
+# MONGO_URI=mongodb://localhost:27017/handong-eats
+# JWT_SECRET=your_secret_key
 
-# production mode
-$ npm run start:prod
+# 3. 개발 서버 실행
+npm run start:dev
 ```
 
-## Test
+## API 문서
 
-```bash
-# unit tests
-$ npm run test
+Swagger 또는 Postman 문서화는 포함되어 있지 않지만, 각 컨트롤러를 통해 엔드포인트를 확인할 수 있습니다.
 
-# e2e tests
-$ npm run test:e2e
+## 실행 화면 예시
 
-# test coverage
-$ npm run test:cov
-```
+아래는 앱 실행 화면 예시입니다.
 
-## Support
+| 로그인 화면 | 메인 메뉴 | 주문 화면 |
+| ------ | ----- | ----- |
+|        |       |       |
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+> 전체 스크린샷은 `/drive-download` 폴더 참조
 
-## Stay in touch
+## 개발자
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- 팀명: Handong Eats
+- 구성: 백엔드 1명, 프론트엔드 1명, 디자이너 1명
 
-## License
+## 라이선스
 
-Nest is [MIT licensed](LICENSE).
+MIT License
+
